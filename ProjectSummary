@@ -1,0 +1,45 @@
+
+
+To compile code in Visual Studio Code=> run =>
+            cd path/to/your/directory
+            gcc yourfile.c -o yourprogram
+            ./yourprogram
+
+Code Summary
+
+    void createUser()
+        - Adds a new user to the system.
+
+            Checks if the user array is full.
+            Ask for user information: name, age, and address.
+            Validates that the name and address are not empty.
+            Ensures the age is a positive number.
+            Increments the user count after successful creation.
+
+    void readAllUsers()
+        - Displays all stored users.
+
+            Checks if there are users to display.
+            Prints user information for all stored users.
+
+    void updateUser()
+        - Updates information of an existing user.
+
+            Ask for the user ID and verifies if it exists.
+            (Also check that if user enter character, ask to enter the ID again )
+            Allows updating of the user's name, age, and address.
+            Validates inputs to ensure correctness (e.g., non-empty name/address, valid age not character).
+
+    void deleteUser()
+        - Removes a user from the system.
+
+            Ask for the user ID to delete.
+            (Also check that if user enter character, ask to enter the ID again )
+            Verifies if the ID exists and, if found, removes the user by shifting elements in the array.
+            Adjusts the user count and displays correctly.
+
+int main()
+
+        Provides a menu for creating, reading, updating, and deleting users.
+        Continuously Ask for user options until the user chooses to exit.
+        Executes the corresponding function based on user input.
