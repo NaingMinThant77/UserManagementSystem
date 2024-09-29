@@ -4,28 +4,16 @@
 
 #define MAX_USERS 10
 
-typedef struct
-{
-    int id;
-    char name[50];
-    int age;
-    char address[100];
-} User;
-
 // Arrays to store user data
-// int ids[MAX_USERS];
-// char names[MAX_USERS][50];
-// int ages[MAX_USERS];
-// char addresses[MAX_USERS][100];
-// int userCount = 0;
-
-User users[MAX_USERS];
+int ids[MAX_USERS];
+char names[MAX_USERS][50];
+int ages[MAX_USERS];
+char addresses[MAX_USERS][100];
 int userCount = 0;
 
 // Function to create a user's information
 void createUser()
 {
-    // check that the number of user is full
     if (userCount >= MAX_USERS)
     {
         printf("User storage is full.\n");
@@ -33,28 +21,27 @@ void createUser()
     }
 
     printf("Create User Page\n********************\n");
-    users[userCount].id = userCount + 1;
+    ids[userCount] = userCount + 1;
 
     do
     {
         printf("Enter name: ");
-        scanf(" %[^\n]", users[userCount].name);
+        scanf(" %[^\n]", names[userCount]);
 
-        // Ensure name is non-empty
-        if (strlen(users[userCount].name) == 0)
+        if (strlen(names[userCount]) == 0)
         {
             printf("Name cannot be empty. Please try again.\n");
         }
-    } while (strlen(users[userCount].name) == 0);
+    } while (strlen(names[userCount]) == 0);
 
     // Ensure age is a valid number
-    bool ageValid;
-    while (ageValid == false)
-    { // !ageValid
+    bool ageValid = false;
+    while (!ageValid)
+    {
         printf("Enter age: ");
-        scanf("%d", &users[userCount].age);
+        scanf("%d", &ages[userCount]);
 
-        if (users[userCount].age <= 0)
+        if (ages[userCount] <= 0)
         {
             printf("Invalid age. Please enter a positive number.\n");
             while (getchar() != '\n')
@@ -69,34 +56,31 @@ void createUser()
     do
     {
         printf("Enter address: ");
-        scanf(" %[^\n]", users[userCount].address);
+        scanf(" %[^\n]", addresses[userCount]);
 
-        // Ensure address is non-empty
-        if (strlen(users[userCount].address) == 0)
+        if (strlen(addresses[userCount]) == 0)
         {
             printf("Address cannot be empty. Please try again.\n");
         }
-    } while (strlen(users[userCount].address) == 0);
+    } while (strlen(addresses[userCount]) == 0);
 
     userCount++;
     printf("User created successfully!\n");
 }
 
-// Function to read user's information
+// Function to read all users' information
 void readAllUsers()
 {
     printf("Reading All Users\n********************\n");
-    // check for no user
     if (userCount == 0)
     {
         printf("No User found!\n");
         return;
     }
 
-    // Get user from array
     for (int i = 0; i < userCount; i++)
     {
-        printf("%d %s %d %s\n", users[i].id, users[i].name, users[i].age, users[i].address);
+        printf("%d %s %d %s\n", ids[i], names[i], ages[i], addresses[i]);
     }
 }
 
@@ -115,7 +99,7 @@ void updateUser()
 
         for (int i = 0; i < userCount; i++)
         {
-            if (users[i].id == id)
+            if (ids[i] == id)
             {
                 found = true;
                 printf("User found! Going to update ...\n");
@@ -123,34 +107,30 @@ void updateUser()
                 char temp[100]; // for name and address
 
                 // Name update
-                printf("Enter name to update (leave empty/ enter to keep current): ");
-                // Reads input from the user including the newline character if the input is shorter than the buffer size.
+                printf("Enter name to update (leave empty to keep current): ");
                 fgets(temp, sizeof(temp), stdin);
                 if (temp[0] != '\n')
                 {
-                    temp[strcspn(temp, "\n")] = 0; // Remove newline character if present and replaces it with a null terminator
-                    strcpy(users[i].name, temp);   // Copy the cleaned input from temp to users[userCount].name
+                    temp[strcspn(temp, "\n")] = 0; // Remove newline character if present
+                    strcpy(names[i], temp);        // Copy the cleaned input from temp to names[i]
                 }
 
                 // Age update
                 int tempAge;
                 while (true)
-                { // if valid input
+                {
                     printf("Enter age to update (0 to keep current): ");
-
                     if (scanf("%d", &tempAge) != 1)
                     {
-                        // If scanf fails to read an integer, clear the invalid input
                         printf("Invalid input. Please enter a numeric value for the age.\n");
                         while (getchar() != '\n')
                             ; // Clear the input buffer
                     }
                     else
                     {
-                        // If a valid integer is entered
                         if (tempAge > 0)
                         {
-                            users[i].age = tempAge;
+                            ages[i] = tempAge;
                         }
                         getchar();
                         break;
@@ -163,7 +143,7 @@ void updateUser()
                 if (temp[0] != '\n')
                 {
                     temp[strcspn(temp, "\n")] = 0;
-                    strcpy(users[i].address, temp);
+                    strcpy(addresses[i], temp);
                 }
 
                 printf("User id: %d Updated ...\n", id);
@@ -171,11 +151,11 @@ void updateUser()
             }
         }
 
-        if (found == false)
+        if (!found)
         {
             printf("Your provided id was not found! Try again!\n");
         }
-    } while (found == false);
+    } while (!found);
 }
 
 // Function to delete a user
@@ -190,7 +170,7 @@ void deleteUser()
         printf("Enter id to delete: ");
 
         if (scanf("%d", &id) != 1)
-        { // The user enters a non-numeric character, it will return 0
+        {
             printf("Invalid input! Please enter a numeric value.\n");
             while (getchar() != '\n')
                 ; // clear invalid input
@@ -199,16 +179,15 @@ void deleteUser()
 
         for (int i = 0; i < userCount; i++)
         {
-            if (users[i].id == id)
+            if (ids[i] == id)
             {
                 found = true;
                 for (int j = i; j < userCount - 1; j++)
                 {
-                    users[j] = users[j + 1];
-                    // ids[j] = ids[j + 1];
-                    // strcpy(names[j], names[j + 1]);
-                    // ages[j] = ages[j + 1];
-                    // strcpy(addresses[j], addresses[j + 1]);
+                    ids[j] = ids[j + 1];
+                    strcpy(names[j], names[j + 1]);
+                    ages[j] = ages[j + 1];
+                    strcpy(addresses[j], addresses[j + 1]);
                 }
                 userCount--;
                 printf("User id: %d Deleted\n", id);
@@ -216,11 +195,11 @@ void deleteUser()
             }
         }
 
-        if (found == false)
+        if (!found)
         {
             printf("Your provided id was not found! Try again!\n");
         }
-    } while (found == false);
+    } while (!found);
 }
 
 int main()
@@ -256,7 +235,3 @@ int main()
 
     return 0;
 }
-
-//
-// Created by marco on 9/2/24.
-//
